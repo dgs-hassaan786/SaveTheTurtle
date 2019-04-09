@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Turtle.Domain.Models\Turtle.Domain.Models.csproj" />
+    <ProjectReference Include="..\Turtle.Foundation.SharedContext\Turtle.Foundation.SharedContext.csproj" />
+  </ItemGroup>
+
+</Project>

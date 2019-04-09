@@ -1,0 +1,38 @@
+{
+  //The board size in x y coordinates
+  "matrix_rows": 4,
+  "matrix_columns": 5,
+
+  //The mines defined as coordinated
+  "mines": [
+    {
+      "x": 0,
+      "y": 2
+    },
+    {
+      "x": 2,
+      "y": 2
+    },
+    {
+      "x": 1,
+      "y": 1
+    }
+  ],
+
+  //Starting point of the turtle
+  "starting_point": {
+    "x": 2,
+    "y": 4
+  },
+
+  //Direction of the turtle
+  "start_direction": "North",
+
+  //exit point of turtle
+  "exit_point": {
+    "x": 0,
+    "y": 0
+  }
+
+
+}
