@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Turtle.Domain.Data;
-using Turtle.Domain.Data.Builder;
-using Turtle.Domain.Models.Entities;
-using Turtle.Domain.Models.Enums;
+﻿using Turtle.Domain.Data;
 
 namespace Turtle.Client.ConsoleApp
 {
@@ -15,17 +8,19 @@ namespace Turtle.Client.ConsoleApp
         {
 
             var configFile = "game-settings.json";
-            var movesFile = "moves.json";            
+            var movesFile = "moves.json";
 
-            if(args.Length > 0 && args.Length == 2)
+            //parsing the file names to our variables
+            if (args.Length > 0 && args.Length == 2)
             {
                 configFile = args[0];
-                movesFile = args[1];                
+                movesFile = args[1];
             }
 
-            IExecutor executor = new Executor( configFile, movesFile);
+            //calling the executor interface
+            IExecutor executor = new Executor(configFile, movesFile);
             executor.Run();
-         
+
         }
 
 

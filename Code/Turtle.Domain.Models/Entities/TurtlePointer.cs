@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Turtle.Domain.Models.Enums;
+﻿using Turtle.Domain.Models.Enums;
 
 namespace Turtle.Domain.Models.Entities
 {

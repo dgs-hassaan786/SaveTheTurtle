@@ -5,6 +5,9 @@ using Turtle.Domain.Models.Enums;
 
 namespace Turtle.Domain.Data.Builder
 {
+    /// <summary>
+    /// Games Configuration file
+    /// </summary>
     public class Configurations
     {
         [JsonProperty("matrix_rows")]

@@ -19,11 +19,14 @@ namespace Turtle.Domain.Data
     }
     public class Executor : IExecutor
     {
+        #region fields and properties
         private Configurations _gameConfig;
         private Moves[] _movements;
         private TurtlePointer _turtle;
         Dictionary<int, BoardCell[]> _board;
+        #endregion
 
+        #region constructor
         public Executor(string configFile, string movesFile)
         {
             _gameConfig = JsonFileReader.IRead<Configurations>(configFile);
@@ -32,7 +35,9 @@ namespace Turtle.Domain.Data
             InitializeBoard();
 
         }
+        #endregion
 
+        #region interface implementation and public methods
         public void Run()
         {
             Writer.Write("-------- Welcome to the Save the Turtle -------------", ConsoleColor.DarkYellow);
@@ -74,8 +79,8 @@ namespace Turtle.Domain.Data
                                 break;
                         }
                         break;
-                    case Moves.Rotate:                        
-                        RotateTurtle(_turtle);                        
+                    case Moves.Rotate:
+                        RotateTurtle(_turtle);
                         break;
                     default:
                         break;
@@ -92,9 +97,18 @@ namespace Turtle.Domain.Data
                 Writer.Write("Turtle couldn't find the way and lost forever", ConsoleColor.Red);
             }
         }
+        #endregion
 
+        #region private methods
+
+        /// <summary>
+        /// Strategy to move the turtle to north
+        /// </summary>
+        /// <param name="loopBreak"></param>
+        /// <returns></returns>
         private bool MoveNorth(bool loopBreak)
         {
+            //Verifying whether the array will throw out of index or not [for west is like [y=2] to [y=1] i.e our y coordinate changes only
             if (_turtle.XVal - 1 < 0)
             {
                 Writer.Write($"Cannot move turtle as beyond position: [{_turtle.XVal},{_turtle.YVal}]", ConsoleColor.Yellow);
@@ -112,10 +126,14 @@ namespace Turtle.Domain.Data
 
             return loopBreak;
         }
-
+        /// <summary>
+        /// Strategy to move the turtle to south
+        /// </summary>
+        /// <returns></returns>
         private bool MoveSouth()
         {
             bool loopBreak = false;
+            //Verifying whether the array will throw out of index or not [for west is like [y=2] to [y=3] i.e our y coordinate changes only
             if (_turtle.XVal + 1 == _gameConfig.MatrixX)
             {
                 Writer.Write($"Cannot move turtle as beyond position: [{_turtle.XVal},{_turtle.YVal}]", ConsoleColor.Yellow);
@@ -123,7 +141,7 @@ namespace Turtle.Domain.Data
             else
             {
                 if (_board[_turtle.XVal + 1][_turtle.YVal].HasMine)
-                {                    
+                {
                     Writer.Write($"Danger Turtle can hit the mine at [{_turtle.XVal + 1},{_turtle.YVal}]", ConsoleColor.Red);
                 }
                 Writer.Write($"Turtle moved from position: [{_turtle.XVal},{_turtle.YVal}] to [{_turtle.XVal + 1},{_turtle.YVal}]", ConsoleColor.DarkGreen);
@@ -134,19 +152,26 @@ namespace Turtle.Domain.Data
             return loopBreak;
         }
 
+        /// <summary>
+        /// Strategy to move the turtle to east
+        /// </summary>
+        /// <returns></returns>
         private bool MoveEast()
         {
             bool loopBreak = false;
+            
+            //Verifying whether the array will throw out of index or not [for west is like [x=2] to [x=3] i.e our x coordinate changes only
             if (_turtle.YVal + 1 == _gameConfig.MatrixY)
             {
                 Writer.Write($"Cannot move turtle as beyond position: [{_turtle.XVal},{_turtle.YVal}]", ConsoleColor.Yellow);
             }
             else
             {
+                //checking if the cell of consideration has mine or not
                 if (_board[_turtle.XVal][_turtle.YVal + 1].HasMine)
                 {
                     Writer.Write($"Danger Turtle can hit the mine at [{_turtle.XVal},{_turtle.YVal + 1}]", ConsoleColor.Red);
-                }                
+                }
                 Writer.Write($"Turtle moved from position: [{_turtle.XVal},{_turtle.YVal}] to [{_turtle.XVal},{_turtle.YVal + 1}]", ConsoleColor.DarkGreen);
                 _turtle.YVal += 1;
                 loopBreak = CellHasMineOrExit(_turtle, _board);
@@ -155,16 +180,22 @@ namespace Turtle.Domain.Data
             return loopBreak;
         }
 
+        /// <summary>
+        /// Strategy to move the turtle to west
+        /// </summary>
+        /// <returns></returns>
         private bool MoveWest()
         {
             bool loopBreak = false;
 
+            //Verifying whether the array will throw out of index or not [for west is like [x=3] to [x=2] i.e our x coordinate changes only
             if (_turtle.YVal - 1 < 0)
             {
                 Writer.Write($"Cannot move turtle as beyond position: [{_turtle.XVal},{_turtle.YVal}]", ConsoleColor.Yellow);
             }
             else
             {
+                //checking if the cell of consideration has mine or not
                 if (_board[_turtle.XVal][_turtle.YVal - 1].HasMine)
                 {
                     Writer.Write($"Danger Turtle can hit the mine at [{_turtle.XVal},{_turtle.YVal - 1}]", ConsoleColor.Red);
@@ -177,13 +208,20 @@ namespace Turtle.Domain.Data
             return loopBreak;
         }
 
+        /// <summary>
+        /// The method check whether the cell has mine or exit point.
+        /// It prints the respective message and returns a true or false.
+        /// </summary>
+        /// <param name="turtle"></param>
+        /// <param name="board"></param>
+        /// <returns></returns>
         private static bool CellHasMineOrExit(TurtlePointer turtle, Dictionary<int, BoardCell[]> board)
         {
             bool loopBreak = false;
 
             if (board[turtle.XVal][turtle.YVal].HasMine)
             {
-                Writer.Write("Turtle hitted the mine and killed...",ConsoleColor.DarkRed);
+                Writer.Write("Turtle hitted the mine and killed...", ConsoleColor.DarkRed);
                 loopBreak = true;
             }
             else if (board[turtle.XVal][turtle.YVal].IsExitPoint)
@@ -195,6 +233,10 @@ namespace Turtle.Domain.Data
             return loopBreak;
         }
 
+        /// <summary>
+        /// The method update the direction of the turtle
+        /// </summary>
+        /// <param name="turtle"></param>
         private static void RotateTurtle(TurtlePointer turtle)
         {
             var previousDirection = turtle.Direction;
@@ -218,6 +260,9 @@ namespace Turtle.Domain.Data
             Writer.Write($"Turtle Direction changed from {previousDirection} to {turtle.Direction}", ConsoleColor.DarkYellow);
         }
 
+        /// <summary>
+        /// The method initialze the board dictionary
+        /// </summary>
         private void InitializeBoard()
         {
             _board = new Dictionary<int, BoardCell[]>();
@@ -237,21 +282,24 @@ namespace Turtle.Domain.Data
             }
         }
 
+        /// <summary>
+        /// The method print the board on console
+        /// </summary>
         private void PrintBoard()
         {
             for (int i = 0; i < _gameConfig.MatrixX; i++)
             {
                 StringBuilder builder = new StringBuilder();
-                builder.Append("|");                
+                builder.Append("|");
                 for (int j = 0; j < _gameConfig.MatrixY; j++)
                 {
-                    builder.Append($"{(_board[i][j].HasMine ? " Mine " : "      ")}{(_board[i][j].IsExitPoint ? " Exit " : "      ")}|");                    
+                    builder.Append($"{(_board[i][j].HasMine ? " Mine " : "      ")}{(_board[i][j].IsExitPoint ? " Exit " : "      ")}|");
                 }
 
                 Writer.Write(builder.ToString(), ConsoleColor.Blue);
                 Writer.Write();
             }
         }
-
+        #endregion
     }
 }
